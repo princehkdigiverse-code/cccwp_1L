@@ -113,9 +113,19 @@ export function useCanvasScrollAnimation({
       const frameIdx = Math.round(currentFrameObj.val);
       let img = imagesCache.current.get(frameIdx);
 
-      if (!img && frameIdx !== 1) {
-        // Fallback to first frame if requested frame is not yet cached/loaded
-        img = imagesCache.current.get(1);
+      if (!img) {
+        // Find the closest loaded frame in cache to prevent flickering/resetting to frame 1
+        let closestKey = 1;
+        let minDiff = Infinity;
+        for (const key of imagesCache.current.keys()) {
+          const diff = Math.abs(key - frameIdx);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestKey = key;
+          }
+        }
+        img = imagesCache.current.get(closestKey);
+
         // Trigger load of the missing frame in background
         preloadFrame(frameIdx).then(() => {
           if (Math.round(currentFrameObj.val) === frameIdx) {
@@ -148,31 +158,37 @@ export function useCanvasScrollAnimation({
       const currentIdx = Math.round(index);
       drawCurrentFrame();
 
-      // Smart preloading: load 15 frames ahead, 5 frames behind
-      const startPreload = Math.max(1, currentIdx - 5);
-      const endPreload = Math.min(frameCount, currentIdx + 15);
+      // Smart preloading: load 25 frames ahead, 10 frames behind
+      const startPreload = Math.max(1, currentIdx - 10);
+      const endPreload = Math.min(frameCount, currentIdx + 25);
 
       for (let i = startPreload; i <= endPreload; i++) {
         preloadFrame(i).catch(() => {});
       }
 
       // Memory cleanup: delete frames that are far away
-      if (imagesCache.current.size > 80) {
+      if (imagesCache.current.size > 150) {
         for (const [key] of imagesCache.current.entries()) {
-          if (key < currentIdx - 15 || key > currentIdx + 30) {
+          if (key < currentIdx - 30 || key > currentIdx + 50) {
             imagesCache.current.delete(key);
           }
         }
       }
     };
 
-    // Initialize first frame
+    // Initialize and preload first 30 frames for smooth start
     if (isUsingFrames) {
-      preloadFrame(1).then(() => {
+      const initialPreloads = [];
+      const preloadsCount = Math.min(30, frameCount);
+      for (let i = 1; i <= preloadsCount; i++) {
+        initialPreloads.push(preloadFrame(i));
+      }
+
+      Promise.all(initialPreloads.map(p => p.catch(() => {}))).then(() => {
         resizeCanvas();
         drawCurrentFrame();
         window.addEventListener("resize", resizeCanvas);
-      }).catch(() => {});
+      });
     }
 
     // Create GSAP ScrollTrigger timeline
