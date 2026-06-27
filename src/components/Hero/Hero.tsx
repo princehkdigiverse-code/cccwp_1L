@@ -2,52 +2,34 @@
 
 import { motion } from "framer-motion";
 import { Play, Sparkles } from "lucide-react";
-import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
 
 export default function Hero() {
-  const { canvasRef, videoRef, isUsingFrames } = useCanvasScrollAnimation({
-    folderName: "hero",
-    frameCount: 120,
-    fallbackVideoUrl: "/videos/hero-full.mp4",
-    triggerSelector: "#home",
-    startTrigger: "top center",
-    endTrigger: "bottom center",
-    pin: false,
-  });
-
   return (
     <section
       id="home"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-bg-dark z-20"
     >
-      {/* Render Canvas or fallback video */}
-      {isUsingFrames ? (
-        <canvas
-          ref={canvasRef}
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-40 scale-100"
-          style={{ filter: "brightness(0.6) contrast(1.1)" }}
-        />
-      ) : (
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-40 scale-100"
-          style={{ filter: "brightness(0.6) contrast(1.1)" }}
-        >
-          <source src="/videos/hero-full.mp4" type="video/mp4" />
-        </video>
-      )}
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-70 scale-100"
+        style={{ filter: "brightness(0.8) contrast(1.1)" }}
+      >
+        <source src="/videos/0222.mp4" type="video/mp4" />
+      </video>
 
       {/* Luxury Glass Reflection Overlays */}
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/2 to-transparent opacity-20 pointer-events-none z-10 skew-y-12 scale-150 transform-gpu" />
 
       {/* Backdrop overlay */}
-      <div className="absolute inset-0 bg-bg-dark/30 z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-bg-dark/15 z-10 pointer-events-none" />
 
       {/* Deep Dark Decorative Gradients */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/60 z-10 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-bg-dark/70 via-transparent to-bg-dark/20 z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/30 z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-bg-dark/40 via-transparent to-bg-dark/10 z-10 pointer-events-none" />
 
       {/* Content Container */}
       <div className="relative z-20 max-w-[1400px] mx-auto px-6 lg:px-8 text-center flex flex-col items-center">

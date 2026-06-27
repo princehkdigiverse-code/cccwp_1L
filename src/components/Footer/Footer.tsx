@@ -25,7 +25,7 @@ export default function Footer() {
   });
 
   return (
-    <footer className="relative bg-[#040E18] border-t border-white/5 pt-20 pb-10 overflow-hidden">
+    <footer className="relative bg-[#040E18] border-t border-white/5 pt-28 pb-10 overflow-hidden">
 
       {/* Background Video or Canvas */}
       {isUsingFrames ? (

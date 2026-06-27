@@ -76,7 +76,7 @@ export default function Booking() {
   };
 
   return (
-    <section id="booking" className="relative py-28 md:py-36 bg-[#051421] overflow-hidden">
+    <section id="booking" className="relative py-32 md:py-44 bg-[#051421] overflow-hidden section-divider">
       {/* Ambient glow blobs */}
       <div className="absolute top-0 right-0 w-[28rem] h-[28rem] bg-primary/6 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[22rem] h-[22rem] bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
@@ -85,7 +85,7 @@ export default function Booking() {
       <div className="section-container relative z-10">
 
         {/* ── Section Header ── */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.35em] uppercase text-primary font-bold mb-5">
             <span className="w-8 h-px bg-primary/50" />
             Plan Your Visit

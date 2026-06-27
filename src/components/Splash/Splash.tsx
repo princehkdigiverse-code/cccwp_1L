@@ -16,7 +16,7 @@ export default function Splash() {
   });
 
   return (
-    <section id="splash-section" className="relative h-[70vh] min-h-[500px] w-full flex items-center justify-center overflow-hidden bg-bg-dark">
+    <section id="splash-section" className="relative h-[80vh] min-h-[550px] w-full flex items-center justify-center overflow-hidden bg-bg-dark section-divider">
       {/* Background Canvas / Video */}
       {isUsingFrames ? (
         <canvas

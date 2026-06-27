@@ -51,7 +51,7 @@ export default function WavePool() {
   });
 
   return (
-    <section id="wave-pool-section" className="relative py-24 md:py-32 bg-[#071C2C] overflow-hidden">
+    <section id="wave-pool-section" className="relative py-32 md:py-44 bg-[#071C2C] overflow-hidden section-divider">
       <div className="absolute top-1/2 left-0 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="section-container relative z-10">

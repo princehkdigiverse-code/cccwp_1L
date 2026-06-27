@@ -76,7 +76,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative py-24 md:py-32 bg-[#071C2C] overflow-hidden">
+    <section id="contact" className="relative py-32 md:py-44 bg-[#071C2C] overflow-hidden section-divider">
       {/* Ambient glow blobs — mirror of Booking but flipped */}
       <div className="absolute top-0 left-0 w-[28rem] h-[28rem] bg-primary/6 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[22rem] h-[22rem] bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
@@ -85,7 +85,7 @@ export default function Contact() {
       <div className="section-container relative z-10">
 
         {/* ── Section Header ── */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.35em] uppercase text-primary font-bold mb-4">
             <span className="w-6 h-px bg-primary/50" />
             Get In Touch

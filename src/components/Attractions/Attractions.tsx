@@ -51,13 +51,13 @@ export default function Attractions() {
   });
 
   return (
-    <section id="attractions" className="relative py-24 md:py-32 bg-[#051421] overflow-hidden">
+    <section id="attractions" className="relative py-32 md:py-44 bg-[#051421] overflow-hidden section-divider">
       <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="section-container relative z-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
           <div>
             <span className="text-xs tracking-[0.3em] uppercase text-primary font-bold">The Main Event</span>
             <h2 className="text-3xl md:text-5xl font-poppins font-black uppercase text-white mt-2 leading-tight">
@@ -105,7 +105,7 @@ export default function Attractions() {
           </div>
 
           {/* Right: Cards */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
+          <div className="lg:col-span-5 flex flex-col gap-5">
             {ATTRACTIONS.map((attr, idx) => {
               const IconComponent = attr.icon;
               return (
@@ -115,7 +115,7 @@ export default function Attractions() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.6, delay: idx * 0.08 }}
-                  className="group glass-card p-5 rounded-2xl border border-white/5 flex gap-4 items-start hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                  className="group glass-card p-6 rounded-2xl border border-white/5 flex gap-4 items-start hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                 >
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${attr.iconBg} border border-white/5`}>
                     <IconComponent className={`w-5 h-5 ${attr.iconColor}`} />

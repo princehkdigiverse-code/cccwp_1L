@@ -18,12 +18,12 @@ export default function Gallery() {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
   return (
-    <section id="gallery" className="relative py-24 md:py-32 bg-[#051421] overflow-hidden">
+    <section id="gallery" className="relative py-32 md:py-44 bg-[#051421] overflow-hidden section-divider">
       <div className="absolute top-1/4 right-0 w-80 h-80 bg-primary/8 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="section-container relative z-10">
         {/* Header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-16">
           <span className="text-xs tracking-[0.3em] uppercase text-primary font-bold">Visual Journey</span>
           <h2 className="text-3xl md:text-5xl font-poppins font-black uppercase text-white mt-2 leading-tight">
             Our Premium <span className="text-gradient">Gallery</span>
@@ -34,7 +34,7 @@ export default function Gallery() {
         </div>
 
         {/* 3-column even grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {IMAGES.map((img, idx) => (
             <motion.div
               key={idx}
@@ -43,7 +43,7 @@ export default function Gallery() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.7, delay: idx * 0.07 }}
               onClick={() => setActiveIdx(idx)}
-              className="relative h-64 rounded-2xl overflow-hidden group cursor-pointer border border-white/5 bg-white/3"
+              className="relative h-72 rounded-2xl overflow-hidden group cursor-pointer border border-white/5 bg-white/3"
             >
               <Image
                 src={img.src}

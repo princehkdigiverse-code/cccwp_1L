@@ -24,14 +24,25 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-24 md:py-32 w-full flex items-center bg-[#071C2C] overflow-hidden"
+      className="relative py-32 md:py-44 w-full flex items-center bg-gradient-to-b from-[#051421] via-[#071C2C] to-[#051421] overflow-hidden section-divider"
     >
-      <div className="section-container w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
+      {/* Background Decorative Ambient Glows */}
+      <div className="absolute top-1/2 -left-32 w-96 h-96 bg-[#00a3e0]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-10 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="section-container w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
+
         {/* Left: Canvas/Video visual frame */}
-        <div className="lg:col-span-6 relative aspect-[4/3] lg:aspect-[16/10] w-full rounded-3xl overflow-hidden border border-white/10 bg-[#051421] shadow-2xl">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="lg:col-span-6 relative aspect-[4/3] lg:aspect-[16/10] w-full rounded-3xl overflow-hidden border border-white/15 bg-[#051421] shadow-[0_20px_50px_rgba(0,0,0,0.5)] group"
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-bg-dark/80 via-transparent to-transparent z-10 pointer-events-none" />
-          
+          <div className="absolute inset-0 border border-primary/20 rounded-3xl pointer-events-none z-20 group-hover:border-primary/40 transition-colors duration-500" />
+
           {isUsingFrames ? (
             <canvas
               ref={canvasRef}
@@ -40,6 +51,8 @@ export default function About() {
           ) : (
             <video
               ref={videoRef}
+              autoPlay
+              loop
               muted
               playsInline
               className="w-full h-full object-cover relative z-0"
@@ -49,40 +62,53 @@ export default function About() {
           )}
 
           {/* Premium badge overlay */}
-          <div className="absolute top-4 left-4 z-20 bg-bg-dark/60 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest text-primary font-bold">
+          <div className="absolute top-5 left-5 z-20 bg-bg-dark/70 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-[11px] uppercase tracking-widest text-primary font-bold flex items-center gap-2 shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             Live Showcase
           </div>
-        </div>
+        </motion.div>
 
         {/* Right: Text Information */}
-        <div className="lg:col-span-6 flex flex-col justify-center gap-6 min-w-0">
-          <span className="text-xs tracking-[0.3em] uppercase text-primary font-bold">Discover Luxury</span>
-          <h2 className="text-3xl md:text-5xl font-poppins font-black uppercase text-white leading-tight">
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="lg:col-span-6 flex flex-col justify-center gap-6 min-w-0"
+        >
+          <div className="inline-flex items-center gap-2 text-xs tracking-[0.3em] uppercase text-primary font-bold">
+            <Sparkles className="w-3.5 h-3.5" />
+            Discover Luxury
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-poppins font-black uppercase text-white leading-[1.15]">
             Welcome to the Oasis of{" "}
-            <span className="text-gradient">Pure Joy & Thrills</span>
+            <span className="text-gradient block mt-1">Pure Joy & Thrills</span>
           </h2>
 
-          <p className="text-white/70 text-sm md:text-base font-inter leading-relaxed">
+          <p className="text-white/80 text-sm md:text-base font-inter leading-relaxed font-light">
             Chhab Chhaba Chhab Waterpark is a premier luxury aquatic playground. Nestled on the coastal highway, our park blends nature, high-octane water slides, and resort-level hospitality into a cinematic vacation experience.
           </p>
-          <p className="text-white/55 text-xs md:text-sm font-inter leading-relaxed">
+          <p className="text-white/60 text-xs md:text-sm font-inter leading-relaxed font-light">
             Whether you are plunging down our free-fall body slides, dancing in our high-tech rain arenas, or relaxing under private cabanas &mdash; every moment is crafted for absolute comfort and exhilaration.
           </p>
 
           {/* Feature badges */}
-          <div className="grid grid-cols-3 gap-3 mt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-6">
             {features.map((feat, i) => (
               <div
                 key={i}
-                className="p-3 rounded-xl bg-white/5 border border-white/8 hover:border-primary/25 transition-all group flex flex-col items-center text-center"
+                className="p-5 rounded-2xl bg-white/[0.04] backdrop-blur-md border border-white/10 hover:border-primary/40 hover:bg-white/[0.07] transition-all duration-300 group flex flex-col items-center text-center shadow-lg hover:-translate-y-1"
               >
-                <feat.icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform mb-2" />
-                <h4 className="font-poppins font-bold text-white text-[10px] sm:text-xs uppercase">{feat.title}</h4>
-                <p className="text-white/40 text-[9px] mt-1 font-inter">{feat.desc}</p>
+                <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary mb-3 group-hover:scale-110 group-hover:bg-primary group-hover:text-[#051421] transition-all duration-300">
+                  <feat.icon className="w-5 h-5" />
+                </div>
+                <h4 className="font-poppins font-bold text-white text-xs uppercase tracking-wider">{feat.title}</h4>
+                <p className="text-white/50 text-[11px] mt-1.5 font-inter font-light leading-tight">{feat.desc}</p>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

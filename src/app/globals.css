@@ -39,10 +39,12 @@
   }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
@@ -135,4 +137,19 @@ html.lenis body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* ── Section Divider ── */
+/* A subtle gradient line placed at the top of each section for visual separation */
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80%, 900px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 184, 255, 0.25) 30%, rgba(0, 184, 255, 0.4) 50%, rgba(0, 184, 255, 0.25) 70%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
 }
