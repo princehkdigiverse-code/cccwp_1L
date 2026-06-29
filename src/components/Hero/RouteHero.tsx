@@ -62,7 +62,7 @@ export default function RouteHero({
       className="relative h-[65vh] min-h-[480px] w-full bg-bg-dark border-b border-white/5 overflow-hidden"
     >
       {/* Standard Header Viewport (non-sticky for normal page flow) */}
-      <section className="relative h-full w-full flex items-center justify-center overflow-hidden bg-bg-dark z-20">
+      <section className="relative h-full w-full flex items-center justify-center overflow-hidden bg-bg-dark z-20 pt-20 pb-10">
         
         {/* Visual wrapper to apply subtle parallax scale */}
         <div ref={visualRef} className="absolute inset-0 w-full h-full object-cover z-0">
