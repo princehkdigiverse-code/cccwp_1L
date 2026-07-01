@@ -9,26 +9,22 @@ export default function Loader() {
 
   useEffect(() => {
     let loaded = false;
+    let fallback: NodeJS.Timeout | undefined;
     
-    // Check if document is already loaded on the client
+    const handleLoad = () => {
+      loaded = true;
+    };
+
     if (typeof window !== "undefined") {
       if (document.readyState === "complete") {
         loaded = true;
       } else {
-        const handleLoad = () => {
-          loaded = true;
-        };
         window.addEventListener("load", handleLoad);
         
         // Fallback: If for some reason the load event doesn't fire in 8 seconds, let it load anyway
-        const fallback = setTimeout(() => {
+        fallback = setTimeout(() => {
           loaded = true;
         }, 8000);
-
-        return () => {
-          window.removeEventListener("load", handleLoad);
-          clearTimeout(fallback);
-        };
       }
     }
 
@@ -54,7 +50,15 @@ export default function Loader() {
       });
     }, 90);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("load", handleLoad);
+      }
+      if (fallback) {
+        clearTimeout(fallback);
+      }
+    };
   }, []);
 
   return (
