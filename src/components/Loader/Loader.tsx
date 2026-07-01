@@ -8,6 +8,30 @@ export default function Loader() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let loaded = false;
+    
+    // Check if document is already loaded on the client
+    if (typeof window !== "undefined") {
+      if (document.readyState === "complete") {
+        loaded = true;
+      } else {
+        const handleLoad = () => {
+          loaded = true;
+        };
+        window.addEventListener("load", handleLoad);
+        
+        // Fallback: If for some reason the load event doesn't fire in 8 seconds, let it load anyway
+        const fallback = setTimeout(() => {
+          loaded = true;
+        }, 8000);
+
+        return () => {
+          window.removeEventListener("load", handleLoad);
+          clearTimeout(fallback);
+        };
+      }
+    }
+
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -15,10 +39,20 @@ export default function Loader() {
           setTimeout(() => setLoading(false), 600);
           return 100;
         }
-        const increment = Math.floor(Math.random() * 12) + 4;
+
+        // If it reaches 90% and the page hasn't finished loading yet, hold it at 90%
+        if (prev >= 90 && !loaded) {
+          return 90;
+        }
+
+        // Increment progress: speed up if loaded, otherwise increase moderately
+        const increment = loaded 
+          ? Math.floor(Math.random() * 15) + 10 
+          : Math.floor(Math.random() * 8) + 4;
+
         return Math.min(prev + increment, 100);
       });
-    }, 80);
+    }, 90);
 
     return () => clearInterval(interval);
   }, []);
