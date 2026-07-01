@@ -43,13 +43,20 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex flex-col group">
-            <span className="font-poppins font-black text-lg md:text-xl tracking-wider text-gradient uppercase transition-transform duration-300 group-hover:scale-[1.02]">
-              Chhab Chhaba Chhab
-            </span>
-            <span className="text-[9px] tracking-[0.35em] text-accent uppercase font-bold leading-none mt-0.5">
-              Waterpark
-            </span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <img
+              src="/images/logo-chhab.png"
+              alt="Chhab Chhaba Chhab Logo"
+              className="w-14 h-14 md:w-18 md:h-18 object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+            />
+            <div className="flex flex-col">
+              <span className="font-poppins font-black text-lg md:text-xl tracking-wider text-gradient uppercase transition-transform duration-300 group-hover:scale-[1.02]">
+                Chhab Chhaba Chhab
+              </span>
+              <span className="text-[9px] tracking-[0.35em] text-accent uppercase font-bold leading-none mt-0.5">
+                Waterpark
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation Links */}

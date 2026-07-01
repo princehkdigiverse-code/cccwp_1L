@@ -76,10 +76,18 @@ export default function Loader() {
 
           {/* Loader content */}
           <div className="relative z-10 flex flex-col items-center px-4">
+            <motion.img
+              src="/images/logo-chhab.png"
+              alt="Chhab Chhaba Chhab Logo"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="w-20 h-20 md:w-28 md:h-28 object-contain mb-6"
+            />
             <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-4xl md:text-6xl font-poppins font-black tracking-widest text-center text-gradient uppercase"
             >
               Chhab Chhaba Chhab
@@ -87,7 +95,7 @@ export default function Loader() {
             <motion.span
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
               className="text-xs md:text-sm tracking-[0.4em] uppercase text-accent font-medium mt-3"
             >
               Waterpark

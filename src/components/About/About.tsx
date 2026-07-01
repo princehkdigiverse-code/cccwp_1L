@@ -24,7 +24,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-32 md:py-44 w-full flex items-center bg-gradient-to-b from-[#051421] via-[#071C2C] to-[#051421] overflow-hidden section-divider"
+      className="relative py-32 md:py-44 w-full flex items-center bg-gradient-to-b from-[#051421] via-[#071C2C] to-[#051421] overflow-hidden"
     >
       {/* Background Decorative Ambient Glows */}
       <div className="absolute top-1/2 -left-32 w-96 h-96 bg-[#00a3e0]/10 rounded-full blur-[120px] pointer-events-none" />

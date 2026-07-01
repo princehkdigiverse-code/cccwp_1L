@@ -15,7 +15,31 @@ interface UseCanvasScrollAnimationProps {
   endTrigger?: string;
   pin?: boolean | string;
   scrub?: boolean | number;
+  extension?: string;
+  framePrefix?: string;
+  autoplay?: boolean;
 }
+
+const toggleScrollLock = (lock: boolean) => {
+  if (typeof window === "undefined") return;
+
+  const lenis = (window as any).lenis;
+  if (lenis) {
+    if (lock) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  }
+
+  if (lock) {
+    document.documentElement.classList.add("scroll-locked");
+    document.body.classList.add("scroll-locked");
+  } else {
+    document.documentElement.classList.remove("scroll-locked");
+    document.body.classList.remove("scroll-locked");
+  }
+};
 
 export function useCanvasScrollAnimation({
   folderName,
@@ -26,11 +50,15 @@ export function useCanvasScrollAnimation({
   endTrigger = "bottom bottom",
   pin = true,
   scrub = true,
+  extension = "webp",
+  framePrefix = "",
+  autoplay = false,
 }: UseCanvasScrollAnimationProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isUsingFrames, setIsUsingFrames] = useState<boolean | null>(null);
+  const [isAutoplayComplete, setIsAutoplayComplete] = useState(!autoplay);
 
   // Cache of loaded Images to prevent reloading
   const imagesCache = useRef<Map<number, HTMLImageElement>>(new Map());
@@ -38,51 +66,65 @@ export function useCanvasScrollAnimation({
   // Helper to format frame numbers (e.g. 1 -> "0001")
   const getFrameUrl = (index: number) => {
     const formatted = String(index).padStart(4, "0");
-    return `/videos/frames/${folderName}/${formatted}.webp`;
+    return `/videos/frames/${folderName}/${framePrefix}${formatted}.${extension}`;
   };
 
   // Preload a specific frame index
   const preloadFrame = (index: number): Promise<HTMLImageElement> => {
-    if (imagesCache.current.has(index)) {
-      return Promise.resolve(imagesCache.current.get(index)!);
+    // Clamp frame index to valid bounds
+    const clampedIndex = Math.max(1, Math.min(frameCount, index));
+    if (imagesCache.current.has(clampedIndex)) {
+      return Promise.resolve(imagesCache.current.get(clampedIndex)!);
     }
 
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.src = getFrameUrl(index);
+      img.src = getFrameUrl(clampedIndex);
       img.onload = () => {
-        imagesCache.current.set(index, img);
+        imagesCache.current.set(clampedIndex, img);
         resolve(img);
       };
       img.onerror = () => reject();
     });
   };
 
-  // Check if frames actually exist
+  // Clear memory cache when folderName changes to prevent cross-page visual leaks
   useEffect(() => {
+    imagesCache.current.clear();
+  }, [folderName]);
+
+  // Check if frames actually exist with mount protection
+  useEffect(() => {
+    let isMounted = true;
     const checkFramesExist = async () => {
       try {
         const firstFrameUrl = getFrameUrl(1);
         const img = new Image();
         img.src = firstFrameUrl;
         img.onload = () => {
-          setIsUsingFrames(true);
+          if (isMounted) setIsUsingFrames(true);
         };
         img.onerror = () => {
-          console.warn(`Frames not found for ${folderName}. Falling back to video: ${fallbackVideoUrl}`);
-          setIsUsingFrames(false);
+          if (isMounted) setIsUsingFrames(false);
         };
       } catch {
-        setIsUsingFrames(false);
+        if (isMounted) setIsUsingFrames(false);
       }
     };
 
     checkFramesExist();
+    return () => {
+      isMounted = false;
+    };
   }, [folderName, fallbackVideoUrl]);
 
   // Main scroll animation setup
   useEffect(() => {
     if (isUsingFrames === null) return;
+
+    let isMounted = true;
+    let handleVideoEnded: (() => void) | null = null;
+    let safetyTimeout: NodeJS.Timeout | null = null;
 
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
@@ -98,7 +140,7 @@ export function useCanvasScrollAnimation({
 
     // Set canvas dimensions
     const resizeCanvas = () => {
-      if (!canvas) return;
+      if (!canvas || !isMounted) return;
       const rect = canvas.getBoundingClientRect();
       canvas.width = rect.width * (window.devicePixelRatio || 1);
       canvas.height = rect.height * (window.devicePixelRatio || 1);
@@ -109,12 +151,14 @@ export function useCanvasScrollAnimation({
 
     // Draw frame helper
     const drawCurrentFrame = () => {
-      if (!canvas || !ctx2d) return;
-      const frameIdx = Math.round(currentFrameObj.val);
+      if (!canvas || !ctx2d || !isMounted) return;
+      
+      // Clamp frame selection within bounds to prevent empty frame loading
+      const frameIdx = Math.max(1, Math.min(frameCount, Math.round(currentFrameObj.val)));
       let img = imagesCache.current.get(frameIdx);
 
       if (!img) {
-        // Find the closest loaded frame in cache to prevent flickering/resetting to frame 1
+        // Find closest loaded frame in cache to prevent flickering
         let closestKey = 1;
         let minDiff = Infinity;
         for (const key of imagesCache.current.keys()) {
@@ -126,9 +170,9 @@ export function useCanvasScrollAnimation({
         }
         img = imagesCache.current.get(closestKey);
 
-        // Trigger load of the missing frame in background
+        // Preload missing frame in background
         preloadFrame(frameIdx).then(() => {
-          if (Math.round(currentFrameObj.val) === frameIdx) {
+          if (isMounted && Math.round(currentFrameObj.val) === frameIdx) {
             drawCurrentFrame();
           }
         }).catch(() => {});
@@ -155,7 +199,9 @@ export function useCanvasScrollAnimation({
 
     // Preload dynamic window of frames
     const handleFrameChange = (index: number) => {
-      const currentIdx = Math.round(index);
+      if (!isMounted) return;
+      
+      const currentIdx = Math.max(1, Math.min(frameCount, Math.round(index)));
       drawCurrentFrame();
 
       // Smart preloading: load 25 frames ahead, 10 frames behind
@@ -176,71 +222,145 @@ export function useCanvasScrollAnimation({
       }
     };
 
-    // Initialize and preload first 30 frames for smooth start
+    // Initialize preloading and canvas resizing
     if (isUsingFrames) {
+      // Preload first frame immediately to draw canvas without flash
+      preloadFrame(1).then(() => {
+        if (!isMounted) return;
+        resizeCanvas();
+        drawCurrentFrame();
+      }).catch(() => {});
+
+      // Preload remaining frames in background
       const initialPreloads = [];
       const preloadsCount = Math.min(30, frameCount);
-      for (let i = 1; i <= preloadsCount; i++) {
+      for (let i = 2; i <= preloadsCount; i++) {
         initialPreloads.push(preloadFrame(i));
       }
 
       Promise.all(initialPreloads.map(p => p.catch(() => {}))).then(() => {
-        resizeCanvas();
-        drawCurrentFrame();
+        if (!isMounted) return;
         window.addEventListener("resize", resizeCanvas);
+        ScrollTrigger.refresh();
       });
     }
 
-    // Create GSAP ScrollTrigger timeline
-    const scrollTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: triggerElement,
-        start: startTrigger,
-        end: endTrigger,
-        pin: pin,
-        scrub: scrub,
-        onUpdate: (self) => {
-          if (!isUsingFrames && video) {
-            // Control video playhead frame progression via scroll
-            if (video.duration) {
-              // smooth transition of time
-              gsap.to(video, {
-                currentTime: self.progress * video.duration,
-                duration: 0.2,
-                ease: "power1.out",
-                overwrite: "auto",
-              });
-            }
-          }
-        },
-      },
+    // Handle video metadata triggers to prevent NaN seeking duration errors
+    const handleVideoMetadata = () => {
+      if (isMounted) {
+        ScrollTrigger.refresh();
+      }
+    };
+
+    if (!isUsingFrames && video) {
+      if (video.readyState >= 1) {
+        ScrollTrigger.refresh();
+      } else {
+        video.addEventListener("loadedmetadata", handleVideoMetadata);
+      }
+    }
+
+    // Wrap GSAP animations in context for 100% clean React cleanup
+    const gsapCtx = gsap.context(() => {
+      if (autoplay) {
+        // Autoplay & Lock Scroll Flow
+        toggleScrollLock(true);
+
+        // Safety timeout to prevent permanent lock if errors occur
+        safetyTimeout = setTimeout(() => {
+          toggleScrollLock(false);
+          setIsAutoplayComplete(true);
+        }, 15000);
+
+        if (isUsingFrames) {
+          gsap.to(currentFrameObj, {
+            val: frameCount,
+            duration: frameCount / 24, // 24 frames per second
+            ease: "none",
+            onUpdate: () => {
+              handleFrameChange(currentFrameObj.val);
+            },
+            onComplete: () => {
+              toggleScrollLock(false);
+              setIsAutoplayComplete(true);
+              if (safetyTimeout) clearTimeout(safetyTimeout);
+            },
+          });
+        } else if (video) {
+          video.currentTime = 0;
+          handleVideoEnded = () => {
+            toggleScrollLock(false);
+            setIsAutoplayComplete(true);
+            if (safetyTimeout) clearTimeout(safetyTimeout);
+          };
+          video.addEventListener("ended", handleVideoEnded);
+
+          video.play().catch(() => {
+            // Autoplay blocked fallback
+            toggleScrollLock(false);
+            setIsAutoplayComplete(true);
+            if (safetyTimeout) clearTimeout(safetyTimeout);
+          });
+        }
+      } else {
+        // Standard Scroll-scrubbing Flow
+        const scrollTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: triggerElement,
+            start: startTrigger,
+            end: endTrigger,
+            pin: pin,
+            scrub: scrub,
+            onUpdate: (self) => {
+              if (!isUsingFrames && video && video.duration) {
+                // Clamp progress between [0, 1] to prevent OOB seek jumps
+                const clampedProgress = Math.max(0, Math.min(1, self.progress));
+                gsap.to(video, {
+                  currentTime: clampedProgress * video.duration,
+                  duration: 0.1, // Faster tween for closer scroll head alignment
+                  ease: "none",
+                  overwrite: "auto",
+                });
+              }
+            },
+          },
+        });
+
+        if (isUsingFrames) {
+          scrollTimeline.to(currentFrameObj, {
+            val: frameCount,
+            ease: "none",
+            onUpdate: () => {
+              // Draw synchronously inside the GSAP loop to maintain absolute 60fps synchrony
+              handleFrameChange(currentFrameObj.val);
+            },
+          });
+        }
+      }
     });
 
-    if (isUsingFrames) {
-      scrollTimeline.to(currentFrameObj, {
-        val: frameCount,
-        ease: "none",
-        onUpdate: () => {
-          requestAnimationFrame(() => handleFrameChange(currentFrameObj.val));
-        },
-      });
-    }
-
     return () => {
+      isMounted = false;
       window.removeEventListener("resize", resizeCanvas);
-      scrollTimeline.kill();
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === triggerElement) {
-          trigger.kill();
+      if (video) {
+        if (handleVideoEnded) {
+          video.removeEventListener("ended", handleVideoEnded);
         }
-      });
+        video.removeEventListener("loadedmetadata", handleVideoMetadata);
+      }
+      if (safetyTimeout) {
+        clearTimeout(safetyTimeout);
+      }
+      toggleScrollLock(false); // ALWAYS release scroll lock on unmount!
+      gsapCtx.revert(); // Reverts DOM layout modifications and spacer wrappers
     };
-  }, [isUsingFrames, frameCount, triggerSelector, startTrigger, endTrigger, pin, scrub, folderName]);
+  }, [isUsingFrames, frameCount, triggerSelector, startTrigger, endTrigger, pin, scrub, folderName, autoplay]);
 
   return {
     canvasRef,
     containerRef,
     videoRef,
     isUsingFrames,
+    isAutoplayComplete,
   };
 }
