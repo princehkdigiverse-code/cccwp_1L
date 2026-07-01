@@ -244,7 +244,7 @@ export default function Hero() {
       {/* Pricing Ticket Card (Enters at the end of the scroll) */}
       <div
         ref={pricingRef}
-        className="absolute z-30 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] sm:w-[580px] md:w-[780px] lg:w-[880px] p-6 md:p-8 rounded-3xl backdrop-blur-[8px] shadow-[0_30px_70px_rgba(180,235,255,0.15)] border border-[rgba(180,235,255,0.22)] bg-gradient-to-br from-[rgba(180,235,255,0.07)] via-[rgba(180,235,255,0.02)] to-[rgba(7,28,44,0.25)] flex flex-col gap-6 pointer-events-none opacity-0"
+        className="absolute z-30 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] sm:w-[580px] md:w-[780px] lg:w-[880px] p-6 md:p-8 rounded-3xl backdrop-blur-[12px] shadow-[0_30px_70px_rgba(0,184,255,0.25)] border border-[rgba(180,235,255,0.3)] bg-gradient-to-br from-[rgba(180,235,255,0.15)] via-[rgba(7,28,44,0.55)] to-[rgba(5,20,33,0.82)] flex flex-col gap-6 pointer-events-none opacity-0"
         style={{
           willChange: "transform, opacity",
         }}
@@ -273,7 +273,7 @@ export default function Hero() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           
           {/* Child Card */}
-          <div className="flex flex-col justify-between p-5 rounded-2xl bg-gradient-to-b from-[rgba(180,235,255,0.06)] via-transparent to-[rgba(7,28,44,0.15)] border border-[rgba(180,235,255,0.15)] hover:border-[rgba(180,235,255,0.4)] hover:bg-[rgba(180,235,255,0.08)] hover:shadow-[0_10px_30px_rgba(180,235,255,0.1)] transition-all duration-300 text-center gap-4">
+          <div className="flex flex-col justify-between p-5 rounded-2xl bg-gradient-to-b from-[rgba(180,235,255,0.12)] via-[rgba(7,28,44,0.35)] to-[rgba(5,20,33,0.65)] border border-[rgba(180,235,255,0.25)] hover:border-[rgba(180,235,255,0.55)] hover:bg-[rgba(180,235,255,0.15)] hover:shadow-[0_10px_30px_rgba(180,235,255,0.2)] transition-all duration-300 text-center gap-4">
             <div className="flex flex-col items-center gap-2">
               <div className="w-12 h-12 rounded-xl bg-[#00a3e0]/10 flex items-center justify-center text-[#00a3e0] shadow-inner">
                 <Baby className="w-6 h-6" />
@@ -293,7 +293,7 @@ export default function Hero() {
           </div>
 
           {/* Adult Card */}
-          <div className="flex flex-col justify-between p-5 rounded-2xl bg-gradient-to-b from-[rgba(180,235,255,0.06)] via-transparent to-[rgba(7,28,44,0.15)] border border-[rgba(180,235,255,0.15)] hover:border-[rgba(180,235,255,0.4)] hover:bg-[rgba(180,235,255,0.08)] hover:shadow-[0_10px_30px_rgba(180,235,255,0.1)] transition-all duration-300 text-center gap-4">
+          <div className="flex flex-col justify-between p-5 rounded-2xl bg-gradient-to-b from-[rgba(180,235,255,0.12)] via-[rgba(7,28,44,0.35)] to-[rgba(5,20,33,0.65)] border border-[rgba(180,235,255,0.25)] hover:border-[rgba(180,235,255,0.55)] hover:bg-[rgba(180,235,255,0.15)] hover:shadow-[0_10px_30px_rgba(180,235,255,0.2)] transition-all duration-300 text-center gap-4">
             <div className="flex flex-col items-center gap-2">
               <div className="w-12 h-12 rounded-xl bg-[#00a3e0]/10 flex items-center justify-center text-[#00a3e0] shadow-inner">
                 <User className="w-6 h-6" />
@@ -313,7 +313,7 @@ export default function Hero() {
           </div>
 
           {/* Sr. Citizen Card */}
-          <div className="flex flex-col justify-between p-5 rounded-2xl bg-gradient-to-b from-[rgba(180,235,255,0.06)] via-transparent to-[rgba(7,28,44,0.15)] border border-[rgba(180,235,255,0.15)] hover:border-[rgba(180,235,255,0.4)] hover:bg-[rgba(180,235,255,0.08)] hover:shadow-[0_10px_30px_rgba(180,235,255,0.1)] transition-all duration-300 text-center gap-4">
+          <div className="flex flex-col justify-between p-5 rounded-2xl bg-gradient-to-b from-[rgba(180,235,255,0.12)] via-[rgba(7,28,44,0.35)] to-[rgba(5,20,33,0.65)] border border-[rgba(180,235,255,0.25)] hover:border-[rgba(180,235,255,0.55)] hover:bg-[rgba(180,235,255,0.15)] hover:shadow-[0_10px_30px_rgba(180,235,255,0.2)] transition-all duration-300 text-center gap-4">
             <div className="flex flex-col items-center gap-2">
               <div className="w-12 h-12 rounded-xl bg-[#00a3e0]/10 flex items-center justify-center text-[#00a3e0] shadow-inner">
                 <Heart className="w-6 h-6" />
@@ -331,7 +331,6 @@ export default function Hero() {
 
             <span className="text-[10px] text-accent font-bold uppercase tracking-wider animate-pulse">Lunch Free</span>
           </div>
-
         </div>
 
         {/* Free Lunch Announcement and CTA Button */}
