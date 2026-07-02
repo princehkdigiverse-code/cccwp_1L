@@ -76,7 +76,7 @@ export default function Attractions() {
           {/* Left: Video Canvas */}
           <div className="lg:col-span-7 group relative rounded-2xl overflow-hidden border border-white/5 bg-white/3 p-3">
             <div className="relative rounded-xl overflow-hidden aspect-[16/9] bg-black/40">
-              {isUsingFrames ? (
+              {isUsingFrames !== false ? (
                 <canvas
                   ref={canvasRef}
                   className="w-full h-full object-cover opacity-80 group-hover:scale-102 transition-transform duration-700"

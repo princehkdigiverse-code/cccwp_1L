@@ -97,7 +97,7 @@ export default function WavePool() {
           <div className="relative group w-full order-first lg:order-last">
             <div className="absolute -inset-1 bg-gradient-to-r from-secondary to-primary rounded-2xl blur opacity-30 group-hover:opacity-45 transition duration-700" />
             <div className="relative rounded-2xl overflow-hidden aspect-video border border-white/5 shadow-2xl bg-black/40">
-              {isUsingFrames ? (
+              {isUsingFrames !== false ? (
                 <canvas
                   ref={canvasRef}
                   className="w-full h-full object-cover opacity-85 group-hover:scale-102 transition-transform duration-700"

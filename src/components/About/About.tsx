@@ -44,7 +44,7 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-t from-bg-dark/80 via-transparent to-transparent z-10 pointer-events-none" />
           <div className="absolute inset-0 border border-primary/20 rounded-3xl pointer-events-none z-20 group-hover:border-primary/40 transition-colors duration-500" />
 
-          {isUsingFrames ? (
+          {isUsingFrames !== false ? (
             <canvas
               ref={canvasRef}
               className="w-full h-full object-cover relative z-0"

@@ -166,7 +166,7 @@ export default function Hero() {
       style={{ height: "100dvh" }} // Dynamic viewport height prevents layout shifts from collapsing mobile browser address bars
     >
       {/* Background Canvas / Video Scrubbing with GPU layer promotion */}
-      {isUsingFrames ? (
+      {isUsingFrames !== false ? (
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-100 transform-gpu"

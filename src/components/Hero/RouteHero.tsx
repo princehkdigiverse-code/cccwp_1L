@@ -68,7 +68,7 @@ export default function RouteHero({
         {/* Visual wrapper to apply subtle parallax scale */}
         <div ref={visualRef} className="absolute inset-0 w-full h-full object-cover z-0">
           {/* Render Canvas or fallback video */}
-          {isUsingFrames ? (
+          {isUsingFrames !== false ? (
             <canvas
               ref={canvasRef}
               className="w-full h-full object-cover z-0 opacity-40 scale-100"

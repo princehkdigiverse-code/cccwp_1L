@@ -29,7 +29,7 @@ export default function Footer() {
     <footer className="relative bg-[#040E18] border-t border-white/5 pt-28 pb-10 overflow-hidden">
 
       {/* Background Video or Canvas */}
-      {isUsingFrames ? (
+      {isUsingFrames !== false ? (
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-10 pointer-events-none"
