@@ -4,7 +4,7 @@ export const getMediaUrl = (localPath: string, type: "video" | "image" = "video"
   if (!cloudName) return localPath;
   const baseName = localPath.split("/").pop()?.split(".")[0];
   if (!baseName) return localPath;
-  return `https://res.cloudinary.com/${cloudName}/${type}/upload/cccwp/${baseName}`;
+  return `https://res.cloudinary.com/${cloudName}/${type}/upload/f_auto,q_auto/cccwp/${baseName}`;
 };
 
 export const MEDIA_CONFIG = {
