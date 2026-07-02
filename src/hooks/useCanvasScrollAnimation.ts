@@ -62,6 +62,8 @@ export function useCanvasScrollAnimation({
 
   // Cache of loaded Images to prevent reloading
   const imagesCache = useRef<Map<number, HTMLImageElement>>(new Map());
+  // Track active image loading promises to prevent duplicate requests
+  const loadingPromises = useRef<Map<number, Promise<HTMLImageElement>>>(new Map());
 
   // Helper to format frame numbers (e.g. 1 -> "0001")
   const getFrameUrl = (index: number) => {
@@ -76,16 +78,26 @@ export function useCanvasScrollAnimation({
     if (imagesCache.current.has(clampedIndex)) {
       return Promise.resolve(imagesCache.current.get(clampedIndex)!);
     }
+    if (loadingPromises.current.has(clampedIndex)) {
+      return loadingPromises.current.get(clampedIndex)!;
+    }
 
-    return new Promise((resolve, reject) => {
+    const promise = new Promise<HTMLImageElement>((resolve, reject) => {
       const img = new Image();
       img.src = getFrameUrl(clampedIndex);
       img.onload = () => {
         imagesCache.current.set(clampedIndex, img);
+        loadingPromises.current.delete(clampedIndex);
         resolve(img);
       };
-      img.onerror = () => reject();
+      img.onerror = () => {
+        loadingPromises.current.delete(clampedIndex);
+        reject();
+      };
     });
+
+    loadingPromises.current.set(clampedIndex, promise);
+    return promise;
   };
 
   // Clear memory cache when folderName changes to prevent cross-page visual leaks
@@ -142,8 +154,9 @@ export function useCanvasScrollAnimation({
     const resizeCanvas = () => {
       if (!canvas || !isMounted) return;
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * (window.devicePixelRatio || 1);
-      canvas.height = rect.height * (window.devicePixelRatio || 1);
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
       drawCurrentFrame();
     };
 
