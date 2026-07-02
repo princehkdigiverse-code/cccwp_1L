@@ -35,11 +35,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${poppins.variable} ${inter.variable} antialiased scroll-smooth`}
-      style={{ backgroundColor: "#071C2C" }}
     >
       <body 
-        className="bg-bg-dark text-white font-sans selection:bg-primary selection:text-bg-dark"
-        style={{ backgroundColor: "#071C2C", minHeight: "100vh" }}
+        className="bg-bg-dark text-white font-sans selection:bg-primary selection:text-bg-dark min-h-screen"
       >
         <PageTransition>{children}</PageTransition>
       </body>
