@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Shield, Sparkles, Award } from "lucide-react";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
+import { getMediaUrl } from "@/config/media";
 
 const features = [
   { title: "100% Safety", desc: "Certified lifeguards at every slide", icon: Shield },
@@ -57,7 +58,7 @@ export default function About() {
               playsInline
               className="w-full h-full object-cover relative z-0"
             >
-              <source src="/videos/slides.mp4" type="video/mp4" />
+              <source src={getMediaUrl("/videos/slides.mp4", "video")} type="video/mp4" />
             </video>
           )}
 

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Waves } from "lucide-react";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
+import { getMediaUrl } from "@/config/media";
 
 export default function Splash() {
   const { canvasRef, videoRef, isUsingFrames } = useCanvasScrollAnimation({
@@ -32,7 +33,7 @@ export default function Splash() {
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-45"
           style={{ filter: "brightness(0.5) contrast(1.15)" }}
         >
-          <source src="/videos/splash.mp4" type="video/mp4" />
+          <source src={getMediaUrl("/videos/splash.mp4", "video")} type="video/mp4" />
         </video>
       )}
 

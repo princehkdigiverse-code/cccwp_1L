@@ -1,48 +1,58 @@
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+export const getMediaUrl = (localPath: string, type: "video" | "image" = "video") => {
+  if (!cloudName) return localPath;
+  const baseName = localPath.split("/").pop()?.split(".")[0];
+  if (!baseName) return localPath;
+  return `https://res.cloudinary.com/${cloudName}/${type}/upload/cccwp/${baseName}`;
+};
+
 export const MEDIA_CONFIG = {
   videos: {
     hero: {
-      url: "/videos/hero-full.mp4",
+      url: getMediaUrl("/videos/hero-full.mp4", "video"),
       folder: "hero",
       frameCount: 120,
     },
     slides: {
-      url: "/videos/slides.mp4",
+      url: getMediaUrl("/videos/slides.mp4", "video"),
       folder: "slides",
       frameCount: 120,
     },
     child: {
-      url: "/videos/child.mp4",
+      url: getMediaUrl("/videos/child.mp4", "video"),
       folder: "child",
       frameCount: 120,
     },
     splash: {
-      url: "/videos/splash.mp4",
+      url: getMediaUrl("/videos/splash.mp4", "video"),
       folder: "splash",
       frameCount: 120,
     },
     wave: {
-      url: "/videos/wave.mp4",
+      url: getMediaUrl("/videos/wave.mp4", "video"),
       folder: "wave",
       frameCount: 120,
     },
     sunset: {
-      url: "/videos/sunset.mp4",
+      url: getMediaUrl("/videos/sunset.mp4", "video"),
       folder: "sunset",
       frameCount: 120,
     },
   },
   images: {
     slides: {
-      slide1: "/images/slide1.png",
-      slide2: "/images/slide2.png",
-      slide3: "/images/slide3.png",
-      slide4: "/images/slide4.png",
+      slide1: getMediaUrl("/images/slide1.png", "image"),
+      slide2: getMediaUrl("/images/slide2.png", "image"),
+      slide3: getMediaUrl("/images/slide3.png", "image"),
+      slide4: getMediaUrl("/images/slide4.png", "image"),
     },
     placeholders: {
-      aerial: "/images/slide1.png",
-      cyclone: "/images/slide2.png",
-      kidsSplash: "/images/slide3.png",
-      lazyRiver: "/images/slide4.png",
+      aerial: getMediaUrl("/images/slide1.png", "image"),
+      cyclone: getMediaUrl("/images/slide2.png", "image"),
+      kidsSplash: getMediaUrl("/images/slide3.png", "image"),
+      lazyRiver: getMediaUrl("/images/slide4.png", "image"),
     },
   },
 };
+

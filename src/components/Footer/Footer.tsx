@@ -2,6 +2,7 @@
 
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
+import { getMediaUrl } from "@/config/media";
 
 const QUICK_LINKS = [
   { label: "Home", href: "#home" },
@@ -42,7 +43,7 @@ export default function Footer() {
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-10 pointer-events-none"
           style={{ filter: "brightness(0.4) contrast(1.1)" }}
         >
-          <source src="/videos/sunset.mp4" type="video/mp4" />
+          <source src={getMediaUrl("/videos/sunset.mp4", "video")} type="video/mp4" />
         </video>
       )}
 

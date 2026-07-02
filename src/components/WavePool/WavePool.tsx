@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import { useInView } from "framer-motion";
 import { Waves } from "lucide-react";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
+import { getMediaUrl } from "@/config/media";
 
 function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -108,7 +109,7 @@ export default function WavePool() {
                   playsInline
                   className="w-full h-full object-cover opacity-85 group-hover:scale-102 transition-transform duration-700"
                 >
-                  <source src="/videos/wave.mp4" type="video/mp4" />
+                  <source src={getMediaUrl("/videos/wave.mp4", "video")} type="video/mp4" />
                 </video>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-[#071C2C]/80 via-transparent to-transparent pointer-events-none" />

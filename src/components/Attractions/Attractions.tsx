@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Flame, Waves, Heart, Shield } from "lucide-react";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
+import { getMediaUrl } from "@/config/media";
 
 const ATTRACTIONS = [
   {
@@ -87,7 +88,7 @@ export default function Attractions() {
                   playsInline
                   className="w-full h-full object-cover opacity-80 group-hover:scale-102 transition-transform duration-700"
                 >
-                  <source src="/videos/child.mp4" type="video/mp4" />
+                  <source src={getMediaUrl("/videos/child.mp4", "video")} type="video/mp4" />
                 </video>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-[#051421]/80 via-transparent to-transparent pointer-events-none" />

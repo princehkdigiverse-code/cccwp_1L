@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
 import { useGsapScroll } from "@/hooks/useGsapScroll";
+import { getMediaUrl } from "@/config/media";
 
 interface RouteHeroProps {
   title: string;
@@ -33,7 +34,7 @@ export default function RouteHero({
   const { canvasRef, containerRef, videoRef, isUsingFrames } = useCanvasScrollAnimation({
     folderName,
     frameCount,
-    fallbackVideoUrl: videoUrl,
+    fallbackVideoUrl: getMediaUrl(videoUrl, "video"),
     triggerSelector: `#hero-scroll-container-${folderName}`,
     startTrigger: "top top",
     endTrigger: "bottom top",
@@ -83,7 +84,7 @@ export default function RouteHero({
               className="w-full h-full object-cover z-0 opacity-40 scale-100"
               style={{ filter: "brightness(0.6) contrast(1.1)" }}
             >
-              <source src={videoUrl} type="video/mp4" />
+              <source src={getMediaUrl(videoUrl, "video")} type="video/mp4" />
             </video>
           )}
         </div>

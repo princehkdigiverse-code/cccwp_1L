@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useCanvasScrollAnimation } from "@/hooks/useCanvasScrollAnimation";
+import { getMediaUrl } from "@/config/media";
 import BubblesOverlay from "./BubblesOverlay";
 import { Zap, Waves, Smile, Utensils, Compass, Gem, Ticket, ArrowRight, Baby, User, Heart } from "lucide-react";
 
@@ -181,7 +182,7 @@ export default function Hero() {
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-100 transform-gpu"
           style={{ filter: "brightness(0.95) contrast(1.05)", willChange: "transform" }}
         >
-          <source src="/videos/0222.mp4" type="video/mp4" />
+          <source src={getMediaUrl("/videos/0222.mp4", "video")} type="video/mp4" />
         </video>
       )}
 
