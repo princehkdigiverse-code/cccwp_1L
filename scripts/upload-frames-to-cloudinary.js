@@ -69,7 +69,7 @@ async function main() {
 
   for (const dir of subdirs) {
     const dirPath = path.join(FRAMES_DIR, dir);
-    const files = fs.readdirSync(dirPath).filter(f => f.endsWith('.webp'));
+    const files = fs.readdirSync(dirPath).filter(f => f.endsWith('.webp') || f.endsWith('.jpg') || f.endsWith('.jpeg'));
     totalFiles += files.length;
     console.log(`Folder "${dir}": found ${files.length} frames.`);
 
