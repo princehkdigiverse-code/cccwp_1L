@@ -68,7 +68,7 @@ export function useCanvasScrollAnimation({
   // Helper to format frame numbers (e.g. 1 -> "0001")
   const getFrameUrl = (index: number) => {
     const formatted = String(index).padStart(4, "0");
-    return `/videos/frames/${folderName}/${framePrefix}${formatted}.${extension}`;
+    return `https://res.cloudinary.com/dr3vva4uq/image/upload/f_auto,q_auto/cccwp/frames/${folderName}/${framePrefix}${formatted}`;
   };
 
   // Preload a specific frame index

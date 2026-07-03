@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "preview": "next build && next start",
     "extract-frames": "node scripts/extract-frames.js"
   },
   "dependencies": {
